@@ -18,6 +18,9 @@ class TF_NAV {
         void goal_listener_2();
         void goal_listener_3();
         void goal_listener_4();
+        void goal_listener_5();
+        void goal_listener_6();
+        void goal_listener_7();
         void send_goal();
 
     private:
@@ -43,6 +46,16 @@ class TF_NAV {
 
         Eigen::Vector3d _goal4_pos;
         Eigen::Vector4d _goal4_or;
+
+        //Tf aggiuntive per esplorare tutta la mappa
+        Eigen::Vector3d _goal5_pos;
+        Eigen::Vector4d _goal5_or;
+        
+        Eigen::Vector3d _goal6_pos;
+        Eigen::Vector4d _goal6_or;
+
+        Eigen::Vector3d _goal7_pos;
+        Eigen::Vector4d _goal7_or;
         
         typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
