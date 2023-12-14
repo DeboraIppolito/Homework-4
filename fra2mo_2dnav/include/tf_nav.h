@@ -21,7 +21,11 @@ class TF_NAV {
         void goal_listener_5();
         void goal_listener_6();
         void goal_listener_7();
+        void goal_listener_8();
         void send_goal();
+
+        //aggiunta funzione per stampare la posa dell'aruco
+        void pose_retrive();
 
     private:
 
@@ -56,6 +60,10 @@ class TF_NAV {
 
         Eigen::Vector3d _goal7_pos;
         Eigen::Vector4d _goal7_or;
+
+        //tf aggiuntiva per il goal marker 
+        Eigen::Vector3d _goal8_pos;
+        Eigen::Vector4d _goal8_or;
         
         typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
