@@ -13,6 +13,7 @@ class TF_NAV {
         void run();
         void tf_listener_fun();
         void position_pub();
+        // Aggiunti listener
         void goal_listener_1();
         void goal_listener_2();
         void goal_listener_3();
@@ -30,6 +31,7 @@ class TF_NAV {
         Eigen::Vector3d _cur_pos;
         Eigen::Vector4d _cur_or;
 
+        // Aggiunte variabili contenenti le tf
         Eigen::Vector3d _goal1_pos;
         Eigen::Vector4d _goal1_or;
 
@@ -41,6 +43,7 @@ class TF_NAV {
 
         Eigen::Vector3d _goal4_pos;
         Eigen::Vector4d _goal4_or;
+        
         typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
 
