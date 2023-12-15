@@ -45,7 +45,7 @@
 <node name="rviz" pkg="rviz" type="rviz" args="-d $(find rl_fra2mo_description)/conf/fra2mo_conf_map.rviz" required="true" />
 
 
-<!--Static tf publisher for goal1-->
+<!--Static tf publisher for goal-->
 <!-- Definiamo nodi publisher per pubblicare le trasformazioni tra frame -->
 <node pkg="tf" type="static_transform_publisher" name="goal_1_pub" args="-10 3 0 0 0 0 1 map goal1 100" />
 <node pkg="tf" type="static_transform_publisher" name="goal_2_pub" args="-17 9.5 0 0 0 0.965926 0.258819 map goal2 100" />
@@ -56,6 +56,6 @@
 <node pkg="tf" type="static_transform_publisher" name="goal_7_pub" args="-0.70 9 0 0 0 1 0 map goal7 100" />
 
 <!-- goal per portare il robot vicino al marker -->
-<node pkg="tf" type="static_transform_publisher" name="goal_8_pub" args="-14 8.2 0 0 0 1 0 map goal8 100" />
+<node pkg="tf" type="static_transform_publisher" name="goal_8_pub" args="-16 8.5 0 0 0 1 0 map goal8 100" />
 
 </launch>

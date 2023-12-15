@@ -12,7 +12,15 @@ class TF_NAV {
         TF_NAV();
         void run();
         void tf_listener_fun();
+        
+        void tf_aruco_listener_fun(); // ARUCO POSITION LISTENER
+        
         void position_pub();
+
+        void aruco_position_pub(); // ARUCO POSITION PUBLISHER
+        
+        void broadcast_listener();
+
         // Aggiunti listener
         void goal_listener_1();
         void goal_listener_2();
@@ -23,20 +31,24 @@ class TF_NAV {
         void goal_listener_7();
         void goal_listener_8();
         void send_goal();
-
         //aggiunta funzione per stampare la posa dell'aruco
         void pose_retrive();
 
     private:
-
+        
         ros::NodeHandle _nh;
 
         ros::Publisher _position_pub;
+        ros::Publisher _aruco_position_pub;
 
         Eigen::Vector3d _home_pos;
 
         Eigen::Vector3d _cur_pos;
         Eigen::Vector4d _cur_or;
+
+        // ARUCO POSITION
+        Eigen::Vector3d _aruco_pos;
+        Eigen::Vector4d _aruco_or;
 
         // Aggiunte variabili contenenti le tf
         Eigen::Vector3d _goal1_pos;

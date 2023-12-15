@@ -1,15 +1,14 @@
 #include "../include/tf_nav.h"
-#include <tf/transform_broadcaster.h>
 
 
 //global variables for aruco pos
-std::vector<double> aruco_pose(7,0.0);
+ std::vector<double> aruco_pose(7,0.0);
 bool aruco_pose_available = false;
+
 
 
 void arucoPoseCallback(const geometry_msgs::PoseStamped & msg)
 {
-    //salviamo la posa letta nel vettore aruco_pose
     aruco_pose_available = true;
     aruco_pose.clear();
     aruco_pose.push_back(msg.pose.position.x);
@@ -20,61 +19,9 @@ void arucoPoseCallback(const geometry_msgs::PoseStamped & msg)
     aruco_pose.push_back(msg.pose.orientation.z);
     aruco_pose.push_back(msg.pose.orientation.w);
     
-    // ROS_INFO("Posizione (x, y, z): %.2f, %.2f, %.2f", aruco_pose[0], aruco_pose[1], aruco_pose[2]);
-    // ROS_INFO("Orientazione (x, y, z, w): %.2f, %.2f, %.2f, %.2f", aruco_pose[3], aruco_pose[4], aruco_pose[5], aruco_pose[6]);
-
-
-    //creiamo il broadcaster per pubblicare il tf 
-    static tf::TransformBroadcaster br;
-    tf::Transform transform;
-    transform.setOrigin( tf::Vector3(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z) );
-    tf::Quaternion q;
-    q.setX(msg.pose.orientation.x);
-    q.setY(msg.pose.orientation.y);
-    q.setZ(msg.pose.orientation.z);
-    q.setW(msg.pose.orientation.w);
-    transform.setRotation(q);
-    br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", "aruco_frame"));
-}
-
-
-// BROADCAST LISTENER
-// void poseCallback(const geometry_msgs::PoseStamped & msg)
-// {    
-//     static tf::TransformBroadcaster br;
-//     tf::Transform transform;
-//     transform.setOrigin( tf::Vector3(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z) );
-//     tf::Quaternion q;
-//     q.setX(msg.pose.orientation.x);
-//     q.setY(msg.pose.orientation.y);
-//     q.setZ(msg.pose.orientation.z);
-//     q.setW(msg.pose.orientation.w);
-//     transform.setRotation(q);
-//     br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "map", "aruco_frame"));
-// }
-
-void TF_NAV::broadcast_listener() {
-    ros::Rate r( 5 );
-    tf::TransformListener listener;
-    tf::StampedTransform transform;
-    
-    while ( ros::ok() )
-    {
-        try {
-            listener.waitForTransform( "map", "aruco_frame", ros::Time(0), ros::Duration(10.0) );
-            listener.lookupTransform( "map", "aruco_frame", ros::Time(0), transform );
- 
-        }
-        catch( tf::TransformException &ex ) {
-            ROS_ERROR("%s", ex.what());
-            r.sleep();
-            continue;
-        }
-        
-        ROS_INFO("Aruco broadcasted pose: %f, %f, %f, %f, %f, %f, %f", transform.getOrigin().x(), transform.getOrigin().y(), transform.getOrigin().z(), transform.getRotation().w(),  transform.getRotation().x(), transform.getRotation().y(), transform.getRotation().z());
-        r.sleep();
-    }
- 
+ROS_INFO("Posizione (x, y, z): %.2f, %.2f, %.2f", aruco_pose[0], aruco_pose[1], aruco_pose[2]);
+    ROS_INFO("Orientazione (x, y, z, w): %.2f, %.2f, %.2f, %.2f",
+             aruco_pose[3], aruco_pose[4], aruco_pose[5], aruco_pose[6]);
 }
 
 
@@ -135,6 +82,9 @@ void TF_NAV::tf_listener_fun() {
  
 }
  
+
+
+
 
 void TF_NAV::position_pub() {
  
@@ -638,7 +588,6 @@ void TF_NAV::send_goal() {
  
 void TF_NAV::run() {
     boost::thread tf_listener_fun_t( &TF_NAV::tf_listener_fun, this );
-    boost::thread broadcast_listener_t( &TF_NAV::broadcast_listener, this );
     // boost::thread tf_listener_goal1_t( &TF_NAV::goal_listener_1, this );
     // boost::thread tf_listener_goal2_t( &TF_NAV::goal_listener_2, this );
     // boost::thread tf_listener_goal3_t( &TF_NAV::goal_listener_3, this );
@@ -657,8 +606,6 @@ int main( int argc, char** argv ) {
     ros::init(argc, argv, "tf_navigation");
     ros::NodeHandle n;
     ros::Subscriber aruco_pose_sub = n.subscribe("/aruco_single/pose", 1, arucoPoseCallback);
-    
-    //ros::Subscriber aruco_pose_sub_broadcast = n.subscribe("/aruco_single/pose", 1, poseCallback);
     TF_NAV tfnav;
     tfnav.run();
  
