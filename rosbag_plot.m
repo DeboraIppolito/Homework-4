@@ -1,7 +1,7 @@
 close,clear
 clc
 
-bag=rosbag('prova_corretta.bag');
+bag=rosbag('bag_nuova.bag');
 
 topic = '/fra2mo/pose';
 poseStampedMsgs = readMessages(select(bag, 'Topic', topic));
@@ -27,20 +27,12 @@ quatX = cellfun(@(msg) msg.Pose.Orientation.X, poseStampedMsgs);
 quatY = cellfun(@(msg) msg.Pose.Orientation.Y, poseStampedMsgs);
 quatZ = cellfun(@(msg) msg.Pose.Orientation.Z, poseStampedMsgs);
 % Converte quaternion in angoli di Eulero (opzionale)
-eulerAngles = quat2eul([quatW, quatX, quatY, quatZ]);
+eulerAngles = quat2eul([quatW, quatX, quatY, quatZ], 'XYZ');
 
 % Plotta i dati
 figure;
 
-subplot(2, 1, 1);
-plot(timestamps, quatW, '.', timestamps, quatX, '.', timestamps, quatY, '.', timestamps, quatZ, '.');
-legend('W', 'X', 'Y', 'Z');
-xlabel('Time (sec)');
-ylabel('Quaternion Components');
-title('Quaternion Components Plot');
-
-subplot(2, 1, 2);
-plot(timestamps, eulerAngles(:, 1), '-o', timestamps, eulerAngles(:, 2), '-o', timestamps, eulerAngles(:, 3), '-o');
+plot(timestamps, eulerAngles(:, 1), '.', timestamps, eulerAngles(:, 2), '.', timestamps, eulerAngles(:, 3), '.');
 legend('Roll', 'Pitch', 'Yaw');
 xlabel('Time (sec)');
 ylabel('Euler Angles (rad)');
